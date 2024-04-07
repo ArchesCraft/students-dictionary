@@ -1,7 +1,7 @@
 var input = require("prompt-sync")();
 var CLOSE_OPTION = '7';
-var menuResponse = "";
 var grade = "";
+// =====================================================================
 var Diary = /** @class */ (function () {
     function Diary(students) {
         this.students = students;
@@ -104,7 +104,7 @@ var Diary = /** @class */ (function () {
                 else
                     (console.log("Podaj poprawną ocenę."));
             }
-            grade = ""; // tutaj trzeba zrestartowac grade bo inaczej jak juz wczesniej dodawalem oceny to zostaje END i wywala petle while
+            grade = "";
         }
         else
             (console.log("Nie ma ucznia z takim indeksem"));
@@ -114,6 +114,7 @@ var Diary = /** @class */ (function () {
     };
     return Diary;
 }());
+// =====================================================================
 var Student = /** @class */ (function () {
     function Student(firstname, lastname, index, grades) {
         this.firstname = firstname;
@@ -154,11 +155,24 @@ var Student = /** @class */ (function () {
     };
     return Student;
 }());
+// =====================================================================
+var MenuOption;
+(function (MenuOption) {
+    MenuOption[MenuOption["ADD_STUDENT"] = 1] = "ADD_STUDENT";
+    MenuOption[MenuOption["REMOVE_STUDENT"] = 2] = "REMOVE_STUDENT";
+    MenuOption[MenuOption["CHANGE_STUDENT_DATA"] = 3] = "CHANGE_STUDENT_DATA";
+    MenuOption[MenuOption["SHOW_STUDENTS"] = 4] = "SHOW_STUDENTS";
+    MenuOption[MenuOption["SHOW_STUDENT_DATA"] = 5] = "SHOW_STUDENT_DATA";
+    MenuOption[MenuOption["ADD_GRADE"] = 6] = "ADD_GRADE";
+    MenuOption[MenuOption["CLOSE"] = 7] = "CLOSE";
+})(MenuOption || (MenuOption = {}));
+// =====================================================================
 var uczen1 = new Student("Janek", "Krawczyk", "19", ["5", "4", "3", "5"]);
 var uczen2 = new Student("Adam", "Kowalski", "23", ["1", "2", "2", "1"]);
 var uczen3 = new Student("Adam", "Mickiewicz", "98", ["2", "2", "1"]);
 var storage = new Diary([uczen1, uczen2, uczen3]);
-while (menuResponse != CLOSE_OPTION) {
+var menuResponse = "";
+while (+menuResponse != MenuOption.CLOSE) {
     console.log("======================");
     console.log("   MENU    ");
     console.log("1. Dodaj ucznia");
@@ -170,33 +184,32 @@ while (menuResponse != CLOSE_OPTION) {
     console.log("7. WYJDZ");
     console.log("======================");
     menuResponse = input("Wybierz opcje: ");
-    switch (menuResponse) {
-        case "1": {
+    switch (+menuResponse) {
+        case MenuOption.ADD_STUDENT: {
             storage.addStudent();
             break;
         }
-        case "2": {
+        case MenuOption.REMOVE_STUDENT: {
             storage.removeStudent();
             break;
         }
-        case "3": {
+        case MenuOption.CHANGE_STUDENT_DATA: {
             storage.changeStudentData();
             break;
         }
-        case "4": {
-            //console.table(storage.getStudents());
+        case MenuOption.SHOW_STUDENTS: {
             storage.printStudents();
             break;
         }
-        case "5": {
+        case MenuOption.SHOW_STUDENT_DATA: {
             storage.showStudentData();
             break;
         }
-        case "6": {
+        case MenuOption.ADD_GRADE: {
             storage.addStudentGrade();
             break;
         }
-        case CLOSE_OPTION: {
+        case MenuOption.CLOSE: {
             console.log("Zamykanie...");
             break;
         }
